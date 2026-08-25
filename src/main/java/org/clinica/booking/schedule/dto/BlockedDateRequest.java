@@ -3,10 +3,12 @@ package org.clinica.booking.schedule.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.clinica.booking.schedule.validation.ValidBlockedDateRange;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@ValidBlockedDateRange
 public record BlockedDateRequest(
         @NotNull
         @JsonFormat(pattern = "yyyy-MM-dd")
