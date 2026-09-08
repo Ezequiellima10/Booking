@@ -5,6 +5,7 @@ import org.clinica.booking.schedule.dto.ConfirmedSlot;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 // TODO delete when appointment module lands
@@ -24,7 +25,7 @@ public class StubConfirmedAppointmentAdapter implements ConfirmedAppointmentPort
     }
 
     @Override
-    public void rejectPending(LocalDate from, LocalDate to) {
-        log.warn("Stub port: ignoring pending rejection between {} and {}", from, to);
+    public void rejectPending(LocalDate from, LocalDate to, LocalTime startTime, LocalTime endTime) {
+        log.warn("Stub port: ignoring pending rejection between {} {} and {} {}", from, startTime, to, endTime);
     }
 }

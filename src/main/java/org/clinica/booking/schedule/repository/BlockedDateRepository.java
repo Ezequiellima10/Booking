@@ -19,7 +19,5 @@ public interface BlockedDateRepository extends JpaRepository<BlockedDate, Long> 
     List<BlockedDate> findOverlapping(@Param("windowStart") LocalDate windowStart,
                                       @Param("windowEnd") LocalDate windowEnd);
 
-    boolean existsByStartDateAndSource(LocalDate startDate, BlockSource source);
-
     List<BlockedDate> findBySourceAndStartDateBetween(BlockSource source, LocalDate from, LocalDate to);
 }

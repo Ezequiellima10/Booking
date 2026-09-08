@@ -129,7 +129,8 @@ public class ScheduleConfigServiceImpl implements ScheduleConfigService {
 
         BlockedDate saved = blockedDateRepository.save(scheduleMapper.toEntity(request));
         if (!from.isAfter(request.endDate())) {
-            confirmedAppointmentPort.rejectPending(from, request.endDate());
+            confirmedAppointmentPort.rejectPending(from, request.endDate(),
+                    request.startTime(), request.endTime());
         }
         log.info("Blocked date {} created: {}..{}", saved.getId(), saved.getStartDate(), saved.getEndDate());
         return scheduleMapper.toResponse(saved);

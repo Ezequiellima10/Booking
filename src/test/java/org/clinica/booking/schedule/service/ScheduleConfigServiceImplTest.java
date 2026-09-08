@@ -173,7 +173,7 @@ class ScheduleConfigServiceImplTest {
 
         verify(confirmedAppointmentPort).cancelConfirmed(List.of(7L), "Vacaciones");
         verify(blockedDateRepository).save(any());
-        verify(confirmedAppointmentPort).rejectPending(TUESDAY, TUESDAY);
+        verify(confirmedAppointmentPort).rejectPending(TUESDAY, TUESDAY, null, null);
     }
 
     @Test
@@ -186,6 +186,17 @@ class ScheduleConfigServiceImplTest {
 
         assertThat(scheduleConfigService.createBlock(request).source()).isEqualTo(BlockSource.MANUAL);
         verify(confirmedAppointmentPort, never()).cancelConfirmed(any(), any());
+    }
+
+    @Test
+    void createBlock_rejectsPendingOnlyWithinThePartialBlockHours() {
+        when(blockedDateRepository.save(any())).thenAnswer(call -> call.getArgument(0));
+
+        BlockedDateRequest request = new BlockedDateRequest(TUESDAY, TUESDAY,
+                LocalTime.of(15, 0), LocalTime.of(16, 0), "Tramite", false);
+        scheduleConfigService.createBlock(request);
+
+        verify(confirmedAppointmentPort).rejectPending(TUESDAY, TUESDAY, LocalTime.of(15, 0), LocalTime.of(16, 0));
     }
 
     @Test
