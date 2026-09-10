@@ -197,15 +197,6 @@ class AvailabilityServiceImplTest {
     }
 
     @Test
-    void isSlotAvailable_reflectsConfirmedAppointments() {
-        stubSchedule(List.of(slot(SlotType.WORKING_RANGE, DayOfWeek.TUESDAY, "09:00", "13:00")),
-                List.of(), List.of(confirmed(TUESDAY, "09:00")));
-
-        assertThat(availabilityService.isSlotAvailable(TUESDAY, LocalTime.of(9, 0))).isFalse();
-        assertThat(availabilityService.isSlotAvailable(TUESDAY, LocalTime.of(10, 0))).isTrue();
-    }
-
-    @Test
     void findAvailableDates_returnsMatchingWeekdaysInsideTheWindow() {
         stubSchedule(List.of(slot(SlotType.WORKING_RANGE, DayOfWeek.TUESDAY, "09:00", "13:00")),
                 List.of(block(LocalDate.of(2026, 9, 1), null, null)), List.of());

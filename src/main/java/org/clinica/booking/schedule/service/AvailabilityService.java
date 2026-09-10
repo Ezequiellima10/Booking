@@ -14,7 +14,5 @@ public interface AvailabilityService {
 
     DaySchedule getDay(LocalDate date);
 
-    boolean isSlotAvailable(LocalDate date, LocalTime startTime);
-
     List<LocalDate> findAvailableDates(DayOfWeek dayOfWeek, LocalTime startTime);
 }

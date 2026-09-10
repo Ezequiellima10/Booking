@@ -1,6 +1,13 @@
 package org.clinica.booking.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.clinica.booking.appointment.exception.AppointmentAccessDeniedException;
+import org.clinica.booking.appointment.exception.AppointmentNotFoundException;
+import org.clinica.booking.appointment.exception.CancellationWindowClosedException;
+import org.clinica.booking.appointment.exception.DailyLimitReachedException;
+import org.clinica.booking.appointment.exception.InvalidStatusTransitionException;
+import org.clinica.booking.appointment.exception.NoAvailableOccurrencesException;
+import org.clinica.booking.appointment.exception.SlotNotAvailableException;
 import org.clinica.booking.auth.exception.EmailAlreadyRegisteredException;
 import org.clinica.booking.auth.exception.InvalidCredentialsException;
 import org.clinica.booking.integration.holidays.exception.HolidayProviderException;
@@ -78,6 +85,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ConflictErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage(),
                         ex.getConflicts(), OffsetDateTime.now()));
+    }
+
+    @ExceptionHandler(AppointmentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAppointmentNotFound(AppointmentNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.of(HttpStatus.NOT_FOUND, ex.getMessage()));
+    }
+
+    @ExceptionHandler(AppointmentAccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAppointmentAccessDenied(AppointmentAccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ErrorResponse.of(HttpStatus.FORBIDDEN, ex.getMessage()));
+    }
+
+    @ExceptionHandler({SlotNotAvailableException.class, DailyLimitReachedException.class,
+            InvalidStatusTransitionException.class, CancellationWindowClosedException.class,
+            NoAvailableOccurrencesException.class})
+    public ResponseEntity<ErrorResponse> handleAppointmentConflict(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.of(HttpStatus.CONFLICT, ex.getMessage()));
     }
 
     @ExceptionHandler(HolidayProviderException.class)

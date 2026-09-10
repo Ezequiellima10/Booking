@@ -61,12 +61,6 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
-    public boolean isSlotAvailable(LocalDate date, LocalTime startTime) {
-        return getDay(date).slots().stream()
-                .anyMatch(slot -> slot.startTime().equals(startTime) && slot.available());
-    }
-
-    @Override
     public List<LocalDate> findAvailableDates(DayOfWeek dayOfWeek, LocalTime startTime) {
         LocalDate start = window.start();
         LocalDate end = window.end();
